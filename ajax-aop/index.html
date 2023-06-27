@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>aop</title>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <button id="ajax-btn">ajax</button>
+    <button id="jsonp-btn">jsonp</button>
+    <script type="text/javascript">
+      // jq ajax&jsonp aop
+      var _ajax = $.ajax;
+      $.ajax = function (opt) {
+        //备份opt中error和success方法
+        var fn = {
+          beforeSend: function (XHR, settings) {
+            var pathMap = [
+              '/serial_exchange/',
+              '/activity/execute',
+              '/static_activity/',
+              '/game_page_fans_count/',
+              '/questionTj/',
+              '/internal/',
+              '/fbShareCustomize/',
+              '/api/',
+              '/ajax/',
+            ];
+            for (var path of pathMap) {
+              if (settings.url.includes(path)) {
+                settings.url = settings.url.replace(
+                  /eventsapi/,
+                  'gactivityapi'
+                );
+              }
+            }
+          },
+          error: function (XMLHttpRequest, textStatus, errorThrown) {},
+          success: function (data, textStatus) {},
+          complete: function (XHR, TS) {},
+        };
+
+        if (opt.beforeSend) {
+          fn.beforeSend = opt.beforeSend;
+        }
+        if (opt.error) {
+          fn.error = opt.error;
+        }
+        if (opt.success) {
+          fn.success = opt.success;
+        }
+        if (opt.complete) {
+          fn.complete = opt.complete;
+        }
+
+        //扩展增强处理
+        var _opt = $.extend(opt, {
+          //全局允许跨域
+          xhrFields: {
+            withCredentials: true,
+          },
+          error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //错误方法增强处理
+            fn.error(XMLHttpRequest, textStatus, errorThrown);
+          },
+          success: function (data, textStatus) {
+            //成功回调方法增强处理
+            fn.success(data, textStatus);
+          },
+          beforeSend: function (XHR, settings) {
+            //提交前回调方法
+            fn.beforeSend(XHR, settings);
+          },
+          complete: function (XHR, TS) {
+            //请求完成后回调函数 (请求成功或失败之后均调用)。
+            fn.complete(XHR, TS);
+          },
+        });
+        if (opt.xhrFields) {
+          _opt.xhrFields = opt.xhrFields;
+        }
+
+        //调用native ajax 方法
+        return _ajax(_opt);
+      };
+
+      $('#ajax-btn').click(function () {
+        $.post('https://gpassport.37games.com/center/ajax/get_user_json', {
+          // name: 'christmas2021',
+          // action: 'check_time'
+        }).done(function (result) {
+          alert(result.msg);
+        });
+      });
+      $('#jsonp-btn').click(function () {
+        $.ajax({
+          url: 'https://gpassport.37games.com/center/ajax/get_user_json',
+          data: {
+            // name: 'christmas2021',
+            // action: 'check_time'
+          },
+          jsonp: 'callback',
+          async: true,
+          dataType: 'jsonp',
+          // beforeSend: function(jqXHR, settings) {
+          //     //在请求前修改url
+          //     settings.url = settings.url.replace(/eventsapi/, 'gactivityapi')
+          // },
+          success: function (result) {
+            alert(result.msg);
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

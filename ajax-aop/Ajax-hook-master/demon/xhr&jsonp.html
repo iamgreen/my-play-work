@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cmn-Hans">
+    <meta charset="UTF-8">
+    <title>Ajax & Jsonp AOP</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=0.5,user-scalable=no" />
+    <meta name="keywords" content="Ajax hook Demo">
+    <script src="http://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+    <script src="../dist/ajaxhook.min.js"></script>
+</head>
+<style>
+html {
+    font-size: 20px;
+    -webkit-user-select: none;
+}
+</style>
+
+<body>
+    <div style="background: #000; font-size: 38px; color: #ffef68; text-shadow: 2px 2px 10px #ffef68; width: 400px; height: 120px; text-align: center">
+        <div style="padding-top: 30px"> Ajax & Jsonp Hook !</div>
+    </div>
+    <br />
+    <button id="native-ajax-btn">native-ajax-btn</button>
+    <button id="jquery-ajax-btn">jquery-ajax-btn</button>
+    <button id="native-jsonp-btn">native-jsonp-btn</button>
+    <button id="jquery-jsonp-btn">jquery-jsonp-btn</button>
+
+    <script>
+    // 原生ajax实现
+    function myAjax(url) {
+        const events = ['load', 'loadend', 'timeout', 'error', 'readystatechange', 'abort']
+
+        const xhr = new XMLHttpRequest();
+
+        //setTimeout(()=>xhr.abort(),100)
+        xhr.open('get', url, true);
+        xhr.send();
+        events.forEach(function(e) {
+            xhr['on' + e] = function(event) {
+                console.log('on' + e, xhr.readyState, event)
+            }
+            xhr.addEventListener(e, function(event) {
+                console.log(e, xhr.readyState, event)
+            })
+        });
+        xhr.addEventListener('load', function(event) {
+            console.log('response', xhr.response)
+        })
+    }
+
+
+    // 原生 jsonp请求实现
+    function myJsonp(params) {
+        params = params || {};
+        params.data = params.data || {};
+        const callbackName = params.jsonp;
+        const head = document.querySelector('head');
+        const script = document.createElement('script');
+        params.data['callback'] = callbackName;
+        const formateData = data => {
+            let arr = [];
+            for (let key in data) {
+                arr.push(encodeURIComponent(key) + '=' + data[key])
+            }
+            return arr.join('&');
+        }
+        const data = formateData(params.data);
+        script.src = `${params.url}?${data}`;
+        window[callbackName] = function(jsonData) {
+            head.removeChild(script);
+            clearTimeout(script.timer);
+            window[callbackName] = null;
+            params.success && params.success(jsonData)
+        }
+        if (params.time) {
+            script.timer = setTimeout(() => {
+                window[callbackName] = null;
+                head.removeChild(script)
+                params.error && params.error({
+                    message: '超时'
+                })
+            }, time);
+        }
+        head.appendChild(script);
+    }
+
+
+    // 使用ajax hook做aop
+    ah.proxy({
+        onRequest: (config, handler) => {
+            const pathMap = [
+                '/serial_exchange/',
+                '/activity/execute',
+                '/static_activity/',
+                '/game_page_fans_count/',
+                '/questionTj/',
+                '/internal/',
+                '/fbShareCustomize/',
+                '/api/',
+                '/ajax/',
+            ];
+            for (const path of pathMap) {
+                if (config.url.includes(path)) {
+                    config.url = config.url.replace(/eventsapi/, 'gactivityapi');
+                    break;
+                }
+            }
+            handler.next(config);
+        },
+        onError: (err, handler) => {
+            if (err.config.url === 'https://bb/') {
+                handler.resolve({
+                    config: err.config,
+                    status: 200,
+                    headers: { 'content-type': 'text/text' },
+                    response: 'hi world'
+                })
+            } else {
+                handler.next(err)
+            }
+        },
+        onResponse: (response, handler) => {
+            if (response.config.url === location.href) {
+                handler.reject({
+                    config: response.config,
+                    type: 'error'
+                })
+            } else {
+                handler.next(response)
+            }
+        }
+    })
+
+
+    // jsonp aop实现
+    Function.prototype.before = function(func) {
+        const __self = this;
+        return function() {
+            if (func.apply(this, arguments) === false) {
+                return false;
+            }
+            return __self.apply(this, arguments)
+        }
+    }
+    Function.prototype.after = function(func) {
+        const __self = this;
+        return function() {
+            const ret = __self.apply(this, arguments)
+            if (ret === false) {
+                return false;
+            }
+            func.apply(this, arguments);
+            return ret;
+        }
+    }
+
+    // before & after aop callback
+    function jsonpReqUrlRewrite(thisEle) {
+        let isHTMLScriptElement = Object.prototype.toString.call(thisEle) === '[object HTMLScriptElement]';
+        if (!isHTMLScriptElement) return false;
+        const pathMap = [
+            '/serial_exchange/',
+            '/activity/execute',
+            '/static_activity/',
+            '/game_page_fans_count/',
+            '/questionTj/',
+            '/internal/',
+            '/fbShareCustomize/',
+            '/api/',
+            '/ajax/',
+        ];
+        for (const path of pathMap) {
+            if (thisEle.src.includes(path)) {
+                thisEle.src = thisEle.src.replace(/eventsapi/, 'gactivityapi');
+                break;
+            }
+        }
+    }
+
+    // aop 重写 appendChild 和 insertBefore
+    Node.prototype.appendChild = Node.prototype.appendChild.before(jsonpReqUrlRewrite)
+    Node.prototype.insertBefore = Node.prototype.insertBefore.before(jsonpReqUrlRewrite)
+
+
+    $('#native-ajax-btn').click(function() {
+        // 原生ajax
+        myAjax('https://eventsapi.gm99.com/activity/execute');
+    })
+
+    $('#jquery-ajax-btn').click(function() {
+        // jquery post
+        $.post("https://eventsapi.gm99.com/activity/execute", {
+                name: 'christmas2021',
+                action: 'check_time'
+            })
+            .done(function(result) {
+                alert(result.msg);
+            });
+    })
+
+    $('#native-jsonp-btn').click(function() {
+        myJsonp({
+            url: 'https://eventsapi.gm99.com/activity/execute',
+            jsonp: 'callback',
+            data: {
+                name: 'christmas2021',
+                action: 'check_time'
+            },
+            success(res) {
+                console.log('jsonp success:', res);
+            },
+            error(err) {
+                console.log(err);
+            }
+        })
+    })
+
+    $('#jquery-jsonp-btn').click(function() {
+        $.ajax({
+            url: "https://eventsapi.gm99.com/activity/execute",
+            data: {
+                name: 'christmas2021',
+                action: 'check_time'
+            },
+            jsonp: 'callback',
+            async: true,
+            dataType: 'jsonp',
+            // beforeSend: function(jqXHR, settings) {
+            //     //在请求前修改url
+            //     settings.url = settings.url.replace(/eventsapi/, 'gactivityapi')
+            // },
+            success: function(result) {
+                alert(result.msg);
+            }
+        });
+    })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,13 @@
+[workspace]
+members=[
+    "app",
+    "helper",
+    "downloader",
+]
+
+[profile.release]
+lto = "thin"
+opt-level="s"
+codegen-units = 1
+panic = "abort"
+strip = true

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>头像大作战！</title>
+    <link rel="stylesheet" href="./css/view.css" />
+    <link rel="stylesheet" href="./lib/cropper/cropper.css" />
+    <link rel="stylesheet" href="./css/file.css" />
+    <link rel="stylesheet" href="./lib/layui/css/layui.css" />
+  </head>
+  <body>
+    <header><h1 class="title">头像大作战</h1></header>
+    <article>
+      <section>
+        <p id="avatar">
+          <img src="./img/head0.png" alt="0" id="avatar_template" />
+          <img src="" alt="" id="avatar_img" />
+        </p>
+        <p class="hide">
+          <canvas width="500" height="500" id="cvs"></canvas>
+        </p>
+        <p class="control">
+          <button class="layui-btn" id="upload">上传图片</button>
+          <button class="layui-btn" id="prev">上一个相框</button>
+          <button class="layui-btn" id="next">下一个相框</button>
+          <button class="layui-btn" id="download">下载图片</button>
+        </p>
+      </section>
+    </article>
+
+    <div class="shadow-layer"></div>
+    <div class="upload-popup">
+      <!-- 第一行的图片裁剪和预览区域 -->
+      <div class="row1">
+        <!-- 图片裁剪区域 -->
+        <div class="cropper-box">
+          <!-- 这个 img 标签很重要，将来会把它初始化为裁剪区域 -->
+          <img id="image" src="./img/bg.png" />
+        </div>
+        <!-- 图片的预览区域 -->
+        <div class="preview-box">
+          <div>
+            <!-- 宽高为 100px 的预览区域 -->
+            <div class="img-preview w100"></div>
+            <p class="size">100 x 100</p>
+          </div>
+          <div>
+            <!-- 宽高为 50px 的预览区域 -->
+            <div class="img-preview w50"></div>
+            <p class="size">50 x 50</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第二行的按钮区域 -->
+      <div class="row2">
+        <!-- 1、 隐藏域 -->
+        <input
+          type="file"
+          hidden
+          accept="image/jpg,image/jpeg,image/png"
+          id="files"
+        />
+        <button type="button" class="layui-btn" id="btnUpdate">
+          上传本地图片
+        </button>
+        <button
+          type="button"
+          class="layui-btn layui-btn-danger"
+          id="uploadSuccess"
+        >
+          确定
+        </button>
+      </div>
+    </div>
+
+    <!-- <script src="./lib/layui/layui.all.js"></script> -->
+    <script src="./lib/jquery.js"></script>
+    <script src="./lib/cropper/Cropper.js"></script>
+    <script src="./lib/cropper/jquery-cropper.js"></script>
+    <script src="./js/file.js"></script>
+  </body>
+</html>
