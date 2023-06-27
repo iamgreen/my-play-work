@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="index.js"></script>    
+</head>
+<style>
+  body {
+    color: white;
+    padding: 0 16px;
+    width: 300px;
+  }
+
+  p {
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  li {
+    font-size: 12px;
+  }
+
+  #desc {
+    border: 1px solid #808080;
+    border-radius: 4px;
+    padding: 16px;
+  }
+
+  .link {
+    font-size: 12px;
+  }
+
+</style>
+<body>
+  <sp-heading>37Games自动切图插件</sp-heading>
+  <sp-body id="desc">
+    <p>图层前缀说明：</p>
+    <ul>
+      <li>-a-：合并文件夹 + 导出</li>
+      <li>-b-：隐藏文字图层 + 合并文件夹 + 导出</li>
+      <li>-e-：导出非文件夹的所有子图层</li>
+    </ul>
+    <p>
+      <sp-link class="link" href="https://37wiki.37wan.com/pages/viewpage.action?pageId=48498537">使用说明文档</sp-link>
+    </p>
+  </sp-body> 
+  <footer>
+    <sp-button id="trigger">
+      <div slot="icon" style="fill: currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 18 18" width="18">
+          <defs>
+            <style>
+              .fill {
+                fill: #fff;
+              }
+            </style>
+          </defs>
+          <title>S Cut 18 N</title>
+          <rect id="Canvas" fill="#ff13dc" opacity="0" width="18" height="18" /><path class="fill" d="M14.957,11.0605c0-.0035.0165-.0145.012-.0145A4.24048,4.24048,0,0,1,11.4,9.037c-.0085-.014-.023-.0235-.0325-.037.0095-.0135.024-.023.0325-.037a4.2405,4.2405,0,0,1,3.571-2.009c.0045,0-.0115-.0105-.013-.014a2.95851,2.95851,0,1,0-1.965-.794L9.758,7.868l-6.3-3.35a2,2,0,0,0-1.9.0115l-1.147.627L7.63,9,.411,12.8435l1.146.6275a2,2,0,0,0,1.9.0115l6.3-3.35,3.235,1.722a2.946,2.946,0,1,0,1.965-.794Zm.1825-9.0195a1.9665,1.9665,0,1,1-2.10018,1.823l.00018-.00254A1.966,1.966,0,0,1,15.1395,2.041Zm0,13.918a1.9665,1.9665,0,1,1,1.82032-2.10254L16.96,13.859A1.96649,1.96649,0,0,1,15.1395,15.959Z" />
+        </svg>
+      </div>
+      自动切图
+    </sp-button>
+  </footer>
+</body>
+</html>
