@@ -1,0 +1,16 @@
+{
+  "name": "xlsxdemo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "xlsxTransform.js",
+  "scripts": {
+    "xlsxTransform": "vt transform data",
+    "xlsx2json": "node xlsxTransform data"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "v-transform": "^1.0.2",
+    "xlsx": "^0.17.4"
+  }
+}

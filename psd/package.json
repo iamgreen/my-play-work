@@ -1,0 +1,31 @@
+{
+  "name": "psd-to-html",
+  "version": "1.0.0",
+  "description": "A simple tool to convert PSD files to HTML",
+  "main": "src/index.js",
+  "scripts": {
+    "startag": "node src/index-ag-psd.js",
+    "start": "node src/index-psd.js",
+    "test": "node test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhouguilin/psd-to-html.git"
+  },
+  "keywords": [
+    "psd",
+    "html",
+    "conversion"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zhouguilin/psd-to-html/issues"
+  },
+  "homepage": "https://github.com/zhouguilin/psd-to-html#readme",
+  "dependencies": {
+    "ag-psd": "^15.1.0",
+    "canvas": "^2.11.2",
+    "psd": "^3.4.0"
+  }
+}
