@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>grid layout</title>
+    <style type="text/css">
+    .resizable {
+        resize: both;
+        overflow: scroll;
+        border: 1px solid black;
+    }
+
+    .parent1 {
+        width: 300px;
+        height: 300px;
+        display: grid;
+        place-items: center;
+    }
+
+    .child1 {
+        padding: 10px;
+        border: 1px solid black;
+    }
+
+    .parent2 {
+        width: 500px;
+        height: 300px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .child2 {
+        width: 100px;
+        height: 100px;
+        margin: 5px;
+        background-color: red;
+        flex: 0 1 150px;
+    }
+
+    .parent3 {
+        width: 500px;
+        height: 500px;
+        display: grid;
+        grid-template-columns: minmax(150px, 25%) 1fr;
+    }
+
+    .child3-1 {
+        background-color: red;
+    }
+
+    .child3-2 {
+        background-color: blue;
+    }
+
+    .parent4 {
+        width: 500px;
+        height: 500px;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+    }
+
+    .child4-1 {
+        background-color: red;
+    }
+
+    .child4-2 {
+        background-color: blue;
+    }
+
+    .child4-3 {
+        background-color: yellow;
+    }
+
+    .parent5 {
+        width: 500px;
+        height: 500px;
+        display: grid;
+        grid-template: auto 1fr auto / auto 1fr auto;
+    }
+
+    .child5-1 {
+        grid-column: 1/4;
+        background-color: red;
+    }
+
+    .child5-2 {
+        grid-column: 1/2;
+        background-color: blue;
+    }
+
+    .child5-3 {
+        background-color: yellow;
+    }
+
+    .child5-4 {
+        background-color: gray;
+    }
+
+    .child5-5 {
+        grid-column: 1/4;
+        background-color: pink;
+    }
+
+    .parent7 {
+        width: 400px;
+        height: 400px;
+        display: grid;
+        grid-gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .child7-1 {
+        background-color: red;
+    }
+
+    .child7-2 {
+        background-color: blue;
+    }
+
+    .child7-3 {
+        background-color: yellow;
+    }
+
+    .child7-4 {
+        background-color: gray;
+    }
+
+    .parent8 {
+        width: 400px;
+        height: 400px;
+        display: flex;
+        grid-gap: 1rem;
+        grid-template-columns: repeat(3, 1fr);
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .child8 {
+        height: 100px;
+        width: 100%;
+    }
+
+    .child8-1 {
+        background-color: red;
+    }
+
+    .child8-2 {
+        background-color: blue;
+    }
+
+    .child8-3 {
+        background-color: yellow;
+    }
+
+    </style>
+</head>
+
+<body>
+    <h1>01. 超级居中：place-items: center</h1>
+    <div class="parent1 resizable">
+        <a class="child1" href="#">helloworld</a>
+    </div>
+    <h1>02. 解构煎饼式布局：flex: grow shrink baseWidth
+    </h1>
+    <div class="parent2 resizable">
+        <div class="child2">helloworld</div>
+        <div class="child2">helloworld</div>
+        <div class="child2">helloworld</div>
+    </div>
+    <h1>03. 侧边栏布局：grid-template-columns:minmax(min, max) …)</h1>
+    <div class="parent3 resizable">
+        <div class="child3 child3-1">helloworld</div>
+        <div class="child3 child3-2">helloworld</div>
+    </div>
+    <h1>04. 煎饼堆栈布局：grid-template-rows: auto 1fr auto</h1>
+    <div class="parent4 resizable">
+        <div class="child4 child4-1">helloworld</div>
+        <div class="child4 child4-2">helloworld</div>
+        <div class="child4 child4-3">helloworld</div>
+    </div>
+    <h1>05. 经典圣杯布局：grid-template: auto 1fr auto / auto 1fr auto</h1>
+    <div class="parent5 resizable">
+        <div class="child5 child5-1">helloworld</div>
+        <div class="child5 child5-2">helloworld</div>
+        <div class="child5 child5-3">helloworld</div>
+        <div class="child5 child5-4">helloworld</div>
+        <div class="child5 child5-5">helloworld</div>
+    </div>
+    <!-- <h1>06. 12 跨网格：grid-template-columns: repeat(12, 1fr)</h1>
+    <div class="parent6 resizable">
+        <div class="child6 child6-1">helloworld</div>
+        <div class="child6 child6-2">helloworld</div>
+    </div> -->
+    <h1>07. RAM (Repeat, Auto, MinMax): grid-template-columns(auto-fit, minmax(base, 1fr))</h1>
+    <div class="parent7 resizable">
+        <div class="child7 child7-1">helloworld</div>
+        <div class="child7 child7-2">helloworld</div>
+        <div class="child7 child7-3">helloworld</div>
+        <div class="child7 child7-4">helloworld</div>
+    </div>
+    <h1>08. 排列布局：justify-content: space-between</h1>
+    <div class="parent8 resizable">
+        <div class="child8 child8-1">helloworld</div>
+        <div class="child8 child8-2">helloworld</div>
+        <div class="child8 child8-3">helloworld</div>
+    </div>
+    <h1>09. 保持我的风格：clamp(min, actual, max)</h1>
+    <div class="parent9 resizable">
+        <div class="child9 child9-1">helloworld</div>
+        <div class="child9 child9-2">helloworld</div>
+    </div>
+    <h1>10.保持宽高比：aspect-ratio: width / height</h1>
+    <div class="parent10 resizable">
+        <div class="child10 child10-1">helloworld</div>
+    </div>
+    <br /><br /><br /><br />
+    https://mp.weixin.qq.com/s/fyOP86kGicEIcVKoR8Iayg
+</body>
+
+</html>
